@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const hbs = require("hbs");
+const path = require("path");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const alert = require("alert-node");
@@ -24,6 +25,9 @@ app.use(
     },
   })
 );
+
+var partialPath = path.join(__dirname + "/views/partials");
+hbs.registerPartials(partialPath);
 
 mongoose
   .connect(
