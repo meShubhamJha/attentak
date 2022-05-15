@@ -166,20 +166,20 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/addClasses", (req, res) => {
-    const newClass = new RegisterClass({
-        email: session.email,
-        class_id: req.body.class_id,
-        class_name: req.body.class_name,
-        batch: req.body.batch,
-        subject: req.body.subject,
-        section: req.body.section,
-    }); 
-    newClass.save().then((result) => {
-        console.log(result);
-        alert("Class Added");
-        res.redirect("/classes");
-    });
-    
+  const newClass = new RegisterClass({
+    email: session.email,
+    class_id: req.body.class_id,
+    class_name: req.body.class_name,
+    batch: req.body.batch,
+    subject: req.body.subject,
+    section: req.body.section,
+  });
+  newClass.save().then((result) => {
+    console.log(result);
+    alert("Class Added");
+    res.redirect("/classes");
+  });
+});
 
 app.get("/logout", (req, res) => {
   req.session.destroy();
