@@ -46,6 +46,7 @@
           <div class="title"><h1 style="font-size: 35px; font-family: 'Courier New', Courier, monospace;">AttenTaker</h1></div>
           <div class="container" style="width: fit-content;">
           <h1>{{username}}</h1>
+          <a href="/logout">
           <img
             class="profile"
             src="img/man.png"
@@ -53,6 +54,7 @@
             height="50"
             width="50"
           />
+          </a>
           </div>
         </div>
         <div class="date">Date : 10-03-22<br />Time : 10:33 PM</div>
@@ -60,20 +62,13 @@
         <div class="containerv" style="margin-left: 0px; width: 30%;">
         <select id="cls">
           <option>Select Class</option>
-          <option>Class 1</option>
-          <option>Class 2</option>
-          <option>Class 3</option>
-          <option>Class 4</option>
-          <option>Class 5</option>
-          <option>Class 6</option>
-          <option>Class 7</option>
-          <option>Class 8</option>
-          <option>Class 9</option>
-          <option>Class 10</option>
+          {{#each classes}}
+            <option value="{{this.class_name}}">{{this.class_name}}</option>
+            {{/each}}
         </select>
         <input id="date" class = "entry" type="date" />
         <div class="generateQR">
-          <button onclick="generateQR();renderAttendeeList()">Generate QR</button>
+          <button onclick="generateQR()">Generate QR</button>
         </div>
         <div id="stop" class="generateQR">
         </div>
@@ -117,31 +112,6 @@
     stop.appendChild(button);
 
   }
-
-
-//dyanmically rendering attendies list and appending it to table
-function renderAttendeeList(){
-  let attendeeBox = document.getElementById("attendee");
-  let attendeeList = ["Shubham Jha", "Shubham Jha", "Shubham Jha", "Shubham Jha", "Shubham Jha", "Shubham Jha", "Shubham Jha", "Shubham Jha", "Shubham Jha", "Shubham Jha"];
-  
-  for(let i = 0; i < attendeeList.length; i++){
-    let row = document.createElement("tr");
-    let image = document.createElement("img");
-    image.src = "img/man.png";
-    image.alt = "profile";
-    image.className = "attendeeprofile"
-    let col1 = document.createElement("td");
-    let col2 = document.createElement("td");
-    col1.appendChild(image);
-    col2.innerHTML = attendeeList[i]
-    row.appendChild(col1)
-    row.appendChild(col2)
-    attendeeBox.appendChild(row)
-  }
-
-}
-
-
       </script>
 
   </body>

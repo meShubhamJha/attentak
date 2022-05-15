@@ -47,6 +47,7 @@
           <div class="title"><h1 style="font-size: 35px; font-family: 'Courier New', Courier, monospace;">AttenTaker</h1></div>
           <div class="container" style="width: fit-content;">
           <h1>{{username}}</h1>
+          <a href="/logout">
           <img
             class="profile"
             src="img/man.png"
@@ -54,6 +55,7 @@
             height="50"
             width="50"
           />
+          </a>
           </div>
         </div>
        
@@ -62,25 +64,19 @@
                 <div class="topflex">
                     <h1>Class Info</h1>
                     <div class="btn">
-                    <button class="feature-button" style="background-color: #F6C23E;">Add Class</button>
-                    <button class="feature-button" style="background-color: #1CC88A;">Edit Class</button>
-                    <button class="feature-button" style="background-color: #E74A3B;">Delete Class</button>
+                    <button onclick="addclass()" class="feature-button" style="background-color: #F6C23E;">Add Class</button>
+                    <button onclick="editclass()" class="feature-button" style="background-color: #1CC88A;">Edit Class</button>
+                    <button onclick="deleteclass()" class="feature-button" style="background-color: #E74A3B;">Delete Class</button>
                 </div>
                 </div>
                 <hr>
-    
+    {{!-- Select Class --}}
                 <select id="class" style="margin:15px" onchange="update()">
                     <option>Select Class</option>
-                    <option>Class 1</option>
-                    <option>Class 2</option>
-                    <option>Class 3</option>
-                    <option>Class 4</option>
-                    <option>Class 5</option>
-                    <option>Class 6</option>
-                    <option>Class 7</option>
-                    <option>Class 8</option>
-                    <option>Class 9</option>
-                    <option>Class 10</option>
+                    {{!-- iterating through classes array --}}
+                    {{#each classes}}
+                    <option value="{{this.class_name}}">{{this.class_name}}</option>
+                    {{/each}}
                   </select>
                   <input id ="date" onchange="update()" class = "entry" type="date" />
                 <br>
@@ -96,10 +92,105 @@
                         
                     </table>
                 </div>
+
+            </div>
+            {{!-- Add Class Section --}}
+            <div class="addclass popup" id="addclass">
+                <form action="/addclass" method="post">
+                <input type="text" name="class" placeholder="Class Name" required>
+                {{!-- creating selection choice from 2015 to 2022 for batch --}}
+                <select name="batch" style="height : 65px; width : 222px; margin-left : 10px">
+                    <option value="2015">No Select</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                </select>
+                <input type="text" name="section" placeholder="Section" required>
+                <input type="text" name="subject" placeholder="Subject" required>
+                <button style="width: 222px; height: 65px; margin-left: 10px;     background-color: #F6C23E;" type="submit" class="feature-button" style="background-color: #ffffff;">Add Class</button>
+
+                </form>
+            </div>
+            {{!-- Edit Class Section --}}
+            <div class="addclass popup" id="editclass">
+                <form action="/editclass" method="post">
+                <select name="batch" style="height : 65px; width : 222px; margin-left : 10px">
+                    <option value="2015">Select Class</option>
+                    {{!-- iterating through classes array --}}
+                    {{#each classes}}
+                    <option value="{{this.class_name}}">{{this.class_name}}</option>
+                    {{/each}}
+                </select>
+                <input type="text" name="section" placeholder="Section" required>
+                <input type="text" name="subject" placeholder="Subject" required>
+                <select name="batch" style="height : 65px; width : 222px; margin-left : 10px">
+                    <option value="2015">Batch</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                </select>
+                <button style="width: 222px; height: 65px; margin-left: 10px;     background-color: #1bc88a;" type="submit" class="feature-button" style="background-color: #ffffff;">Edit Class</button>
+
+                </form>
+            </div>
+            {{!-- Delete Class Section --}}
+            <div class="addclass popup" id="deleteclass">
+                <form action="/deleteclass" method="post">
+                {{!-- creating selection choice from 2015 to 2022 for batch --}}
+                <select name="class" style="height : 65px; width : 222px; margin-left : 10px">
+                    <option value="2015">Select Class</option>
+                    {{!-- iterating through classes array --}}
+                    {{#each classes}}
+                    <option value="{{this.class_name}}">{{this.class_name}}</option>
+                    {{/each}}
+                </select>
+                <button style="width: 222px; height: 65px; margin-left: 10px;     background-color: #E74A3B;" type="submit" class="feature-button" style="background-color: #ffffff;">Delete Class</button>
+
+                </form>
             </div>
         </div>
     </div>
 <script>
+    //creating a function to display addclass div on button click
+    function addclass() {
+        var x = document.getElementById("addclass");
+        if (x.style.visibility === "hidden") {
+            x.style.visibility = "visible";
+            } else {
+            x.style.visibility = "hidden";
+            }
+        
+    }
+    //creating a function to display editclass div on button click
+    function editclass() {
+        var x = document.getElementById("editclass");
+        if (x.style.visibility === "hidden") {
+            x.style.visibility = "visible";
+            } else {
+            x.style.visibility = "hidden";
+            }
+            
+    }
+    //creating a function to display deleteclass div on button click
+    function deleteclass() {
+        var x = document.getElementById("deleteclass");
+        if (x.style.visibility === "hidden") {
+            x.style.visibility = "visible";
+            } else {
+            x.style.visibility = "hidden";
+            }
+            
+    }
+
     var table = document.getElementById("students");
     function loadDoc(cls, date) 
     {
@@ -153,7 +244,7 @@
             }
             else if (this.readyState == 4 && this.status == 404)
             {
-                alert("Error");
+                alert("Not Found");
             }
         }
     xhttp.open("GET", "data.json");

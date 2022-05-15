@@ -20,7 +20,7 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {
-      maxAge: 60000,
+      maxAge: 6000000,
     },
   })
 );
@@ -68,10 +68,10 @@ const classScheme = new mongoose.Schema({
     type: String,
     required: true,
   },
-  class_id: {
-    type: String,
-    required: true,
-  },
+  //   class_id: {
+  //     type: String,
+  //     required: true,
+  //   },
   class_name: {
     type: String,
     required: true,
@@ -100,26 +100,42 @@ app.get("/", (req, res) => {
 });
 
 app.get("/attendance", (req, res) => {
-  if (req.session.user) {
-    //getting info from database
-    res.render("attendance", {
-      title: "Attendance",
-      username: req.session.username,
-    });
-  } else {
-    res.redirect("/");
-  }
+  //fetches the class details from the database where the email is equal to the email of the user
+  RegisterClass.find({ email: req.session.email }, (err, classes) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (req.session.user) {
+        //getting info from database
+        res.render("attendance", {
+          title: "Attendance",
+          username: req.session.username,
+          classes: classes,
+        });
+      } else {
+        res.redirect("/");
+      }
+    }
+  });
 });
 
 app.get("/classes", (req, res) => {
-  if (req.session.user) {
-    res.render("classes", {
-      title: "Classes",
-      username: req.session.username,
-    });
-  } else {
-    res.redirect("/");
-  }
+  //fetching classes info from database where email is equal to session email
+  RegisterClass.find({ email: req.session.email }, (err, classes) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (req.session.user) {
+        res.render("classes", {
+          title: "Classes",
+          username: req.session.username,
+          classes: classes,
+        });
+      } else {
+        res.redirect("/");
+      }
+    }
+  });
 });
 
 app.post("/register", (req, res) => {
@@ -165,11 +181,12 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.post("/addClasses", (req, res) => {
+app.post("/addclass", (req, res) => {
+  console.log(req.body);
   const newClass = new RegisterClass({
     email: session.email,
-    class_id: req.body.class_id,
-    class_name: req.body.class_name,
+    // class_id: req.body.class_id,
+    class_name: req.body.class,
     batch: req.body.batch,
     subject: req.body.subject,
     section: req.body.section,
@@ -179,6 +196,44 @@ app.post("/addClasses", (req, res) => {
     alert("Class Added");
     res.redirect("/classes");
   });
+});
+
+app.post("/editclass", (req, res) => {
+  //updating the class details where email is equal to session email and class name is equal to the class name of the class
+  RegisterClass.updateOne(
+    { email: session.email, class_name: req.body.class_name },
+    {
+      class_name: req.body.class_name,
+      batch: req.body.batch,
+      subject: req.body.subject,
+      section: req.body.section,
+    },
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        alert("Class Updated");
+        res.redirect("/classes");
+      }
+    }
+  );
+});
+
+app.post("/deleteclass", (req, res) => {
+  //deleting the class where class name is equal to the class name of the class and email is equal to the email of the user
+  RegisterClass.deleteOne(
+    { class_name: req.body.class, email: session.email },
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+        alert("Class Deleted");
+        res.redirect("/classes");
+      }
+    }
+  );
 });
 
 app.get("/logout", (req, res) => {
