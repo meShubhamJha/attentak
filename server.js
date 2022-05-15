@@ -62,6 +62,35 @@ const registrationScheme = new mongoose.Schema({
   },
 });
 
+//creating a scheme for classes
+const classScheme = new mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+  },
+  class_id: {
+    type: String,
+    required: true,
+  },
+  class_name: {
+    type: String,
+    required: true,
+  },
+  batch: {
+    type: String,
+    required: true,
+  },
+  subject: {
+    type: String,
+    required: true,
+  },
+  section: {
+    type: String,
+    required: true,
+  },
+});
+
+const RegisterClass = mongoose.model("RegisterClass", classScheme);
 const Registration = mongoose.model("Registration", registrationScheme);
 
 app.get("/", (req, res) => {
@@ -135,6 +164,22 @@ app.post("/login", (req, res) => {
     }
   });
 });
+
+app.post("/addClasses", (req, res) => {
+    const newClass = new RegisterClass({
+        email: session.email,
+        class_id: req.body.class_id,
+        class_name: req.body.class_name,
+        batch: req.body.batch,
+        subject: req.body.subject,
+        section: req.body.section,
+    }); 
+    newClass.save().then((result) => {
+        console.log(result);
+        alert("Class Added");
+        res.redirect("/classes");
+    });
+    
 
 app.get("/logout", (req, res) => {
   req.session.destroy();
